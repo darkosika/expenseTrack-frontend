@@ -1,5 +1,11 @@
 <a routerLink="/addexpense">Add Expense</a>
+    <input type="text"
+    name="keyword"
+    [(ngModel)]="filters.keyword"
+    (input) = "listExpenses()"
+    />
 <div *ngFor="let expense of expenses">
     <h3>{{expense.expense}}</h3>
     <p>{{expense.amount | currency : 'EUR'}}</p>
+    <a routerLink="/editexpense/{{expense.id}}">Edit Expense</a>
 </div>

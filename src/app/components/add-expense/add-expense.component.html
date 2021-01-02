@@ -16,4 +16,5 @@
     placeholder="Please enter expense description"/>
 
     <button type="submit">Add Expense</button>
+    <button *ngIf="expense.id" (click)= "deleteExpense(expense.id)">Delete Expense</button>
 </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { Expense } from 'src/app/models/expense';
 import { ExpenseService } from 'src/app/services/expense.service';
 
@@ -12,9 +12,16 @@ export class AddExpenseComponent implements OnInit {
 
   expense : Expense = new Expense()
 
-  constructor(private expenseService : ExpenseService, private _router : Router) { }
+  constructor(private expenseService : ExpenseService, private _router : Router, private _activatedRoute : ActivatedRoute) { }
 
   ngOnInit(): void {
+    const isIdPresent = this._activatedRoute.snapshot.paramMap.has('id')
+    if(isIdPresent){
+      const id = +this._activatedRoute.snapshot.paramMap.get('id')
+      this.expenseService.getExpense(id).subscribe(
+        data => this.expense = data
+      )
+    }
   }
   
   saveExpense () {
@@ -25,4 +32,13 @@ export class AddExpenseComponent implements OnInit {
         }
       )
   }
+
+  deleteExpense (id : number) {
+    this.expenseService.delete(id).subscribe(
+      data => {
+        console.log('deleted response', data)
+        this._router.navigateByUrl("/expenses")
+      }
+    )
+}
 }
